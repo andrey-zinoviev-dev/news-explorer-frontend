@@ -1,3 +1,7 @@
+# Новости
+
+Это проект о новостях, которые можно сохранить себе на страницу, если Вы авторизованы
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
