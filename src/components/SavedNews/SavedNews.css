@@ -1,0 +1,51 @@
+.saved-news {
+    padding: 40px 0 56px 0;
+}
+.saved-news__wrapper {
+    margin: 0 104px;
+}
+.saved-news__subtitle {
+    font-size: 18px;
+    line-height: 24px;
+    color: rgba(26, 27, 34, 0.5);
+    margin: 0;
+    margin-bottom: 28px;
+}
+.saved-news__subtitle:last-of-type {
+    margin-bottom: 0;
+}
+.saved-news__subtitle_place_bottom {
+    color: black;
+    
+}
+.saved-news__heading {
+    font-size: 40px;
+    line-height: 46px;
+    font-family: 'Robotoslab';
+    margin: 0;
+    margin-bottom: 30px;
+    width: 44%;
+    font-weight: 500;
+}
+.span_type_bold {
+    font-weight: 700;
+}
+
+@media screen and (max-width: 1023px) {
+    .saved-news {
+        padding: 24px 0 32px 0;
+    }
+    .saved-news__wrapper {
+        margin: 0 40px;
+    }
+    .saved-news__subtitle {
+        font-size: 14px;
+        line-height: 24px;
+        margin-bottom: 16px;
+    }
+    .saved-news__heading {
+        font-size: 30px;
+        line-height: 34px;
+        margin-bottom: 16px;
+    }
+}

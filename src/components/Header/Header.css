@@ -1,0 +1,128 @@
+.header {
+    border-bottom: 1px solid rgba(255,255,255,0.4)
+}
+.header_type_saved-news {
+    border-bottom: 1px solid #B6BCBF;
+}
+.header_type_authorization {
+    border-bottom: 0;
+    display: none;
+}
+.header__wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 19px 0 13px 0;
+    margin: 0 104px;
+}
+.header__title-span {
+    font-size: 20px;
+    line-height: 24px;
+    font-weight: 700;
+    font-family: "Robotoslab";
+}
+.header__title-span_type_saved-news {
+    color: black;
+}
+.header__menu {
+    display: flex;
+    align-items: center;
+}
+.header__link {
+    margin-right: 32px;
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 500;
+    color: #B6BCBF;
+    position: relative;
+    cursor: pointer;
+    text-decoration: none;
+}
+.header__link_type_saved-news {
+    color: black;
+}
+.header__link::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    background: white;
+    bottom: -27px;
+    left: 0;
+    opacity: 0;
+}
+.header__link_type_saved-news::after {
+    content: "";
+    background-color: black;
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    opacity: 0;
+}
+.header__link_status_active {
+    color: white;
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 500;
+    text-decoration: none;
+}
+/* .header__link_status_active_type_saved-news {
+    color: black;
+} */
+.header__link_status_active::after {
+    opacity: 1;
+}
+.header__link_type_saved-news_status_active::after {
+    opacity: 1;
+}
+.header__link_status_inactive::after {
+    opacity: 0;
+}
+.header__login {
+    background-color: rgba(0, 0, 0, 0);
+    border: 1px solid white;
+    font-size: 18px;
+    line-height: 24px;
+    color: white;
+    padding: 12px 14px;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    font-family: "Roboto";
+}
+.header__login_type_saved-news {
+    color: black;
+    border: 1px solid black;
+}
+@media screen and (max-width: 1023px) {
+    .header__wrapper {
+        margin: 0 40px;
+    }
+}
+@media screen and (max-width: 767px) {
+    .header_type_authorization {
+        padding: 16px 0 24px 0;
+    }
+    .header_type_authorization_status_active {
+        display: block;
+        background-color: #1A1B22;
+    }
+    .header__wrapper {
+        margin: 0 16px;
+    }
+    .header__title-span {
+        font-size: 16px;
+        line-height: 24px;
+    }
+    .header__menu {
+        flex-direction: column;
+        width: 100%;
+        align-items: flex-start;
+    }
+    .header__link {
+        margin: 0 0 20px 0;
+    }
+    .header__login {
+        padding: 12px 73px;
+    }
+}

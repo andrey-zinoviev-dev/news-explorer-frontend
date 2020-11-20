@@ -1,0 +1,96 @@
+.main__cards-list-element {
+    max-width: 400px;
+    background-color: white;
+    border-radius: 15px;
+    position: relative;
+}
+.main__cards-list-element-span {
+    position: absolute;
+    padding: 14px 12px;
+    background-color: white;
+    border-radius: 10px;
+    top: 24px;
+    font-size: 13px;
+    right: 75px;
+    line-height: 12px;
+    display: none;
+}
+.main__cards-list-element-span_keyword {
+    display: flex;
+    justify-content: center;
+    padding: 8px 12px;
+    font-size: 14px;
+    line-height: 24px;
+    font-weight: 500;
+    left: 24px;
+    right: 288px;
+    min-width: 88px;
+}
+.main__cards-list-element-span_active {
+    display: inline-block;
+}
+.main__cards-list-element-bookmark {
+    top: 24px;
+    position: absolute;
+    right: 24px;
+}
+.main__cards-list-element-bookmark:hover {
+    background: url('../../images/Group_12-active.png');
+}
+.main__cards-list-element-image {
+    border-radius: 15px 15px 0 0;
+    width: 100%;
+}
+.main__cards-list-element-wrapper {
+    margin: 0 24px;
+    padding: 20px 0 24px 0;
+}
+.main__cards-list-element-date {
+    font-size: 18px;
+    line-height: 24px;
+    color: #B6BCBF;
+    margin: 0;
+    font-family: "Sourcesanspro";
+}
+.main__cards-list-element-heading {
+    font-size: 26px;
+    line-height: 30px;
+    margin: 12px 0 16px 0;
+    font-family: "Robotoslab";
+    font-weight: 500;
+}
+.main__cards-list-element-text {
+    font-size: 16px;
+    line-height: 22px;
+    margin: 0;
+}
+.main__cards-list-element-source {
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 0.4px;
+    color: #B6BCBF;
+    text-transform: uppercase;
+    margin: 10px 0 0 0;
+    font-family: "Robotoslab";
+}
+
+@media screen and (max-width: 1023px) {
+
+    .main__cards-list-element-wrapper {
+        margin: 0 16px;
+    }
+    .main__cards-list-element-span {
+        top: 8px;
+    }
+    .main__cards-list-element-span_keyword {
+        left: 8px;
+    }
+    .main__cards-list-element-bookmark {
+        top: 8px;
+        right: 8px;
+    }
+    .main__cards-list-element-heading {
+        font-size: 22px;
+        line-height: 24px;
+    }
+}
