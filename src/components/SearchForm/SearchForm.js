@@ -3,10 +3,13 @@ import './SearchForm.css';
 
 function SearchForm() {
     return (
-        <form className="main__search">
-            <input className="main__search-input" name="keyword" placeholder="Введите тему новости" autoComplete="off" />
-            <button type="submit" className="main__search-submit">Искать</button>
-        </form>
+        <section className="search">
+            <form className="search__form">
+                <input className="search__form-input" name="keyword" placeholder="Введите тему новости" autoComplete="off" />
+                <button type="submit" className="search__form-submit">Искать</button>
+            </form>
+        </section>
+        
     )
 }
 

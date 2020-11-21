@@ -9,15 +9,16 @@
 .main__headline {
     font-size: 60px;
     line-height: 64px;
-    margin: 0px 416px 32px 416px;
+    margin: 0px calc((100% - 608px)/2) 32px;
     font-family: "Robotoslab";
     font-weight: 400;
 }
 .main__subtitle {
-    margin: 0 479px 0 416px;
+    margin: 0 calc((100% - 608px)/2);
     font-size: 18px;
     line-height: 24px;
     margin-bottom: 64px;
+    max-width: 545px;
 }
 @media screen and (max-width: 1023px) {
     .main {

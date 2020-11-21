@@ -29,16 +29,16 @@ function NewsCard(props) {
         setSaved(!saved);
     }
     return (
-        <li className="main__cards-list-element">
-            {props.mainPage ? "" : <span className="main__cards-list-element-span main__cards-list-element-span_keyword">{props.keyword}</span>}
-            {props.mainPage ? <span className={hovered && !props.loggedIn && !saved ? "main__cards-list-element-span main__cards-list-element-span_active" : "main__cards-list-element-span"}>Войдите, чтобы сохранять статьи</span> : <span className={savedNewsHovered ? "main__cards-list-element-span main__cards-list-element-span_active" : "main__cards-list-element-span"}>Удалить из сохраненных</span>} 
-            <img className="main__cards-list-element-bookmark" src={props.mainPage ? (!saved ? bookmarkPicture : bookmarkPictureSaved) : (deleteIcon)} onMouseOver={!saved && props.mainPage ? changeImageSrcOnHoverToActive : showDeleteMessageOnHover} onMouseOut={!saved && props.mainPage ? changeImageSrcOnHoverBack : removeDeleteMessageOnhoverBack} onClick={props.loggedIn && props.mainPage ? savePost : ""}></img>
-            <img className="main__cards-list-element-image" src={props.image} alt="каритнка новости"></img>
-            <div className="main__cards-list-element-wrapper">
-                <p className="main__cards-list-element-date">{props.date}</p>
-                <h3 className="main__cards-list-element-heading">{props.title}</h3>
-                <p className="main__cards-list-element-text">{props.text}</p>
-                <p className="main__cards-list-element-source">{props.source}</p>
+        <li className="cards__list-element">
+            {props.mainPage ? "" : <span className="cards__list-element-span cards__list-element-span_keyword">{props.keyword}</span>}
+            {props.mainPage ? <span className={hovered && !props.loggedIn && !saved ? "cards__list-element-span cards__list-element-span_active" : "cards__list-element-span"}>Войдите, чтобы сохранять статьи</span> : <span className={savedNewsHovered ? "cards__list-element-span cards__list-element-span_active" : "cards__list-element-span"}>Удалить из сохраненных</span>} 
+            <img className="cards__list-element-bookmark" src={props.mainPage ? (!saved ? bookmarkPicture : bookmarkPictureSaved) : (deleteIcon)} onMouseOver={!saved && props.mainPage ? changeImageSrcOnHoverToActive : showDeleteMessageOnHover} onMouseOut={!saved && props.mainPage ? changeImageSrcOnHoverBack : removeDeleteMessageOnhoverBack} onClick={props.loggedIn && props.mainPage ? savePost : ""}></img>
+            <img className="cards__list-element-image" src={props.image} alt="каритнка новости"></img>
+            <div className="cards__list-element-wrapper">
+                <p className="cards__list-element-date">{props.date}</p>
+                <h3 className="cards__list-element-heading">{props.title}</h3>
+                <p className="cards__list-element-text">{props.text}</p>
+                <p className="cards__list-element-source">{props.source}</p>
             </div>
         </li>
     )

@@ -7,6 +7,7 @@
     display: none;
     justify-content: center;
     align-items: center;
+    z-index: 2;
 }
 .popup_status_opened {
     display: flex;
@@ -77,6 +78,9 @@
     color: #B6BCBF;
     border: 0;
 }
+.popup__form-submit:active {
+    background-color: #2A65CC;
+}
 .popup__form-submit_valid-form {
     background-color: #2F71E5;
     color: white;
@@ -109,7 +113,7 @@
         min-width: 320px;
     }
     .popup__close {
-        top: -45px;
-        right: 0;
+        top: -39px;
+        right: 9px;
     }
 }

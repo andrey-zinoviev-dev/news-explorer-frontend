@@ -7,6 +7,7 @@ import Main from '../Main/Main';
 import SavedNews from '../SavedNews/SavedNews';
 import Footer from '../Footer/Footer';
 import PopupWithForm from '../PopupWithForm/PopupWithForm';
+
 import user from '../../utils/user';
 import { news, moreNews } from '../../utils/news';
 import savedNews from '../../utils/savedNews';
@@ -15,7 +16,7 @@ function App() {
   const [openedPopupWithForm, setOpenedPopupWithForm] = React.useState(false);
   const [articles, setArticles] = React.useState(news);
   const [shortenedHeader, setShortenedHeader] = React.useState(false);
-
+  
   function expandPopupWithForm() {
     setOpenedPopupWithForm(true);
   }
@@ -25,10 +26,7 @@ function App() {
   }
 
   function addNews() {
-    moreNews.forEach((article) => {
-      setArticles([...articles, article]);
-      // console.log(article);
-    })
+    setArticles([...articles, ...moreNews])
   }
 
   function setHeaderWidth() {
@@ -53,6 +51,7 @@ function App() {
   function showHeaderNavigation() {
     setShortenedHeader(false);
   }
+
 
   React.useEffect(() => {
     setHeaderWidth();

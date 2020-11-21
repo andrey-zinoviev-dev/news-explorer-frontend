@@ -1,17 +1,17 @@
 import React from 'react';
 import './PopupWithForm.css';
-import popupCloseSing from '../../images/back.png'
+import popupCloseSing from '../../images/back.png';
+import popupCloseSignSmall from '../../images/back-small.png';
 function PopupWithFrom(props) {
     const [popupSignUp, setPopupSignUp] = React.useState(props.signUp);
     const [inputValue, setInputValue] = React.useState({email: "", password: ""});
     const [validEmail, setValidEmail] = React.useState({valid: false, message: ""});
     const [validPassword, setValidPassword] = React.useState({valid: false, message: ""});
     const [validName, setValidName] = React.useState({valid: false, message: ""});
-
     // let validForm = false;
     // let stateArray = [];
     let validForm = false;
-
+    let smallWidth = false;
     function switchPopups() {
         setPopupSignUp(!popupSignUp);
 
@@ -56,11 +56,19 @@ function PopupWithFrom(props) {
 
     validateForm();
     
+    function changeCloseLogoSize() {
+        if(window.innerWidth < 768) {
+            smallWidth = true;
+        } else {
+            smallWidth = false;
+        }
+    }
+    changeCloseLogoSize();
     return (
         <section className={props.isOpen ? "popup popup_status_opened" : "popup"}>
             <div className="container">
                 <div className="popup__wrapper">
-                    <button className="popup__close" onClick={props.close}><img className="popup__close-logo" src={popupCloseSing} alt="кнопка закрытия окна"></img></button>
+                    <button className="popup__close" onClick={props.close}><img className="popup__close-logo" src={!smallWidth ? popupCloseSing : popupCloseSignSmall} alt="кнопка закрытия окна"></img></button>
                     <h3 className="popup__heading">{popupSignUp ? "Регистрация" : "Вход"}</h3>
                     <form className="popup__form" noValidate={true}>
                         <label className="popup__form-label">Email</label>
