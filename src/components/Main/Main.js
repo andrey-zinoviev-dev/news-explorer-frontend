@@ -5,11 +5,14 @@ import Header from '../Header/Header';
 import SearchForm from '../SearchForm/SearchForm';
 import NewsCardList from '../NewsCardList/NewsCardList';
 import About from '../About/About';
+import UserContext from '../../contexts/UserContext';
 function Main(props) {
+    const user = React.useContext(UserContext);
+    
     return (
         <>
         <div className="background-wrapper">
-            <Header shortenedHeaderWidth={props.shortenedHeaderWidth} mainPage={props.mainPage} loggedIn={props.loggedIn} onLoginButtonClick={props.onLoginButtonClick}></Header>
+            <Header shortenedHeaderWidth={props.shortenedHeaderWidth} mainPage={props.mainPage} user={user} onLoginButtonClick={props.onLoginButtonClick} onLogoutButtonClick={props.onLogoutButtonClick}></Header>
             <section className="main">
                 <div className="container">
                     <h1 className="main__headline">Что творится в мире?</h1>
@@ -18,7 +21,7 @@ function Main(props) {
                 </div>
             </section>
         </div>
-        <NewsCardList news={props.news} mainPage={props.mainPage} loggedIn={props.loggedIn} handleMoreNewsButton={props.handleMoreNewsButton}></NewsCardList>
+        <NewsCardList news={props.news} mainPage={props.mainPage} handleMoreNewsButton={props.handleMoreNewsButton}></NewsCardList>
         <About></About>
         </>
     )

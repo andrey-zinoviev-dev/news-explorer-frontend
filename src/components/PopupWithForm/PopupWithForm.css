@@ -9,7 +9,13 @@
     align-items: center;
     z-index: 2;
 }
-.popup_status_opened {
+/* .popup_status_opened {
+    display: flex;
+} */
+.popup_type_login_status_opened {
+    display: flex;
+}
+.popup_type_register_status_opened {
     display: flex;
 }
 .popup__wrapper {

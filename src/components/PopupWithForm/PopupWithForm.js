@@ -3,19 +3,29 @@ import './PopupWithForm.css';
 import popupCloseSing from '../../images/back.png';
 import popupCloseSignSmall from '../../images/back-small.png';
 function PopupWithFrom(props) {
-    const [popupSignUp, setPopupSignUp] = React.useState(props.signUp);
+    // const [popupSignUp, setPopupSignUp] = React.useState(props.signUp);
     const [inputValue, setInputValue] = React.useState({email: "", password: ""});
     const [validEmail, setValidEmail] = React.useState({valid: false, message: ""});
     const [validPassword, setValidPassword] = React.useState({valid: false, message: ""});
     const [validName, setValidName] = React.useState({valid: false, message: ""});
-    // let validForm = false;
-    // let stateArray = [];
+    const form = document.querySelector('.popup__form');
+    const errorSpans = Array.from(document.querySelectorAll('.popup__error-span'));
+
     let validForm = false;
     let smallWidth = false;
-    function switchPopups() {
-        setPopupSignUp(!popupSignUp);
 
+    function switchPopups() {
+        // props.swapPopupsWithForms();
+        // setPopupSignUp(!popupSignUp);
+        // form.reset();
+        
+        // errorSpans.forEach((errorSpan) => {
+        //     errorSpan.textContent = "";
+        // })
+        // props.popupSignUp = !props.popupSignUp;
+        
     }
+
     function checkInputValidity(event) {
         validateForm();
         const {name, value, validationMessage} = event.target;
@@ -45,6 +55,7 @@ function PopupWithFrom(props) {
             }
         }
     }
+
     function validateForm() {
         if(validEmail.valid && validPassword.valid || validEmail.valid && validPassword.valid && validName.valid) {
             validForm = true;
@@ -52,6 +63,10 @@ function PopupWithFrom(props) {
             validForm = false;
         }
         console.log(validEmail);
+    }
+
+    function handleFormSubmit(evt) {
+        props.onSubmit(evt, inputValue);
     }
 
     validateForm();
@@ -64,20 +79,21 @@ function PopupWithFrom(props) {
         }
     }
     changeCloseLogoSize();
+
     return (
-        <section className={props.isOpen ? "popup popup_status_opened" : "popup"}>
+        <section className={props.isOpen ? `popup ${props.popupClass}_status_opened` : "popup"}>
             <div className="container">
                 <div className="popup__wrapper">
                     <button className="popup__close" onClick={props.close}><img className="popup__close-logo" src={!smallWidth ? popupCloseSing : popupCloseSignSmall} alt="кнопка закрытия окна"></img></button>
-                    <h3 className="popup__heading">{popupSignUp ? "Регистрация" : "Вход"}</h3>
-                    <form className="popup__form" noValidate={true}>
+                    <h3 className="popup__heading">{props.heading}</h3>
+                    <form className="popup__form" noValidate={true} onSubmit={handleFormSubmit}>
                         <label className="popup__form-label">Email</label>
                         <input className="popup__form-input" placeholder="Введите почту" type="email" name="email" pattern="\w+@\w+\.\w+" onInput={checkInputValidity} autoComplete="off"></input>
                         <span className="popup__error-span">{validEmail.message}</span>
                         <label className="popup__form-label">Пароль</label>
                         <input className="popup__form-input" placeholder="Введите пароль" type="password" name="password" pattern="[A-z0-9]\w+" onInput={checkInputValidity} autoComplete="off"></input>
                         <span className="popup__error-span">{validPassword.message}</span>
-                        {popupSignUp ?
+                        {props.popupSignUp ?
                             <>
                                 <label className="popup__form-label">Имя</label>
                                 <input className="popup__form-input" placeholder="Введите имя" name="name" onInput={checkInputValidity} autoComplete="off" min={2} required={true}></input>
@@ -86,9 +102,9 @@ function PopupWithFrom(props) {
                             :
                                 ""
                         }
-                        <button className={validForm ? "popup__form-submit popup__form-submit_valid-form" : "popup__form-submit"} type="submit">Войти</button>
+                        <button className={validForm ? "popup__form-submit popup__form-submit_valid-form" : "popup__form-submit"} type="submit" disabled={!validForm ? true : false}>{props.submitButtonText}</button>
                     </form>
-                    <span className="popup__subtitle">или </span><a className="popup__link" onClick={switchPopups}>{popupSignUp ? "Войти" : "Зарегистрироваться"}</a>
+                    <span className="popup__subtitle">или </span><a className="popup__link" onClick={props.swapPopupsWithForms}>{props.link}</a>
                 </div>
             </div>
             <div className="popup__overlay"></div>
