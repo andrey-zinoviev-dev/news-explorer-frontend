@@ -1,50 +1,44 @@
 import React from 'react';
-import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import '../../blocks/container.css';
 import './App.css';
 
 import Main from '../Main/Main';
 import SavedNews from '../SavedNews/SavedNews';
 import Footer from '../Footer/Footer';
-// import PopupWithForm from '../PopupWithForm/PopupWithForm';
+
 import Login from '../Login/Login';
 import Register from '../Register/Register';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
-import TestComponent from '../TestComponent/TestComponent';
+
 import UserContext from '../../contexts/UserContext';
 
 import mainApi from '../../utils/MainApi';
-// import user from '../../utils/user';
-import { news, moreNews } from '../../utils/news';
-import savedNews from '../../utils/savedNews';
+import newsApi from '../../utils/NewsApi';
+
 
 function App() {
   const [openedLoginPopup, setOpenedLoginPopup] = React.useState(false);
   const [openedRegisterPopup, setOpenedRegisterPopup] = React.useState(false);
-  // const [openedSuccessfullRegistrationPopup, setOpenedSuccessfullRegistrationPopup] = React.useState(false);
-  const [articles, setArticles] = React.useState(news);
+  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [articles, setArticles] = React.useState([]);
+  const [savedArticles, setSavedArticles] = React.useState([]);
   const [shortenedHeader, setShortenedHeader] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState();
-  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [registered, setRegistered] = React.useState(false);
+  const [isSearchActive, setIsSearchActive] = React.useState(false);
+  const [isPreloaderActive, setIsPreloaderActive] = React.useState(false);
+  const [articlesNotFound, setArticlesNotFound] = React.useState(false);
+  const [articleKeyword, setArticleKeyword] = React.useState("");
+  const history = useHistory();
 
   function expandPopupWithForm() {
     setOpenedLoginPopup(true);
   }
 
-  function setLoggedInStatusToTrue() {
-    setLoggedIn(true);
-  }
-  // function expandSuccessfullRegistrationPopup() {
-  //   setOpenedSuccessfullRegistrationPopup(true);
-  // }
-
   function closePopupWithForm() {
     setOpenedLoginPopup(false);
     setOpenedRegisterPopup(false);
-  }
-
-  function addNews() {
-    setArticles([...articles, ...moreNews])
   }
 
   function setHeaderWidth() {
@@ -84,11 +78,28 @@ function App() {
     })
     .then(() => {
       const token = localStorage.getItem('token');
+      const parsedArticles = JSON.parse(localStorage.getItem('articles'));
+      const keyword = localStorage.getItem('keyword');
       mainApi.getUser(token)
       .then((res) => {
-        setLoggedIn(true);
+        evt.target.reset();
         setCurrentUser(res);
-        closePopupWithForm();
+        setLoggedIn(true);
+        if(parsedArticles) {
+          setArticles(parsedArticles);
+          setIsSearchActive(true);
+        }
+        if(keyword) {
+          setArticleKeyword(keyword);
+        }
+        mainApi.getSavedArticles(token)
+        .then((res) => {
+          setSavedArticles(res);
+          closePopupWithForm();
+        })
+        .catch((err) => {
+          console.log(err);
+        })
       })
       .catch((err) => {
         console.log(err);
@@ -99,9 +110,81 @@ function App() {
     });
   }
 
+  function submitRegistrationForm(evt, formData) {
+    evt.preventDefault();
+    mainApi.registerUser(formData)
+    .then(() => {
+      setRegistered(true);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
+
   function onLogoutButtonClick () {
     localStorage.removeItem('token');
+    // localStorage.removeItem('articles');
     setCurrentUser();
+    // setArticles();
+    // setIsSearchActive(false);
+    history.push('/');
+  }
+
+  //ключевая фукнция с прелоудером, потом поменять на обращение к newsApi, setTimeout заменить на then(() => {})
+  function searchFormSubmit (evt, topic) {
+    evt.preventDefault();
+    
+    setIsSearchActive(true);
+    setIsPreloaderActive(true);
+    newsApi.getNews(topic)
+        .then((res) => {
+          if(res.articles.length === 0) {
+            setIsPreloaderActive(false);
+            setArticlesNotFound(true);
+          } else {
+            localStorage.setItem('articles', JSON.stringify(res.articles));
+            localStorage.setItem('keyword', topic);
+            setArticlesNotFound(false);
+            setIsPreloaderActive(false);
+            setArticleKeyword(topic);
+            setArticles(res.articles);
+            evt.target.reset();
+          }
+          
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+  }
+
+  function saveArticle(card) {
+    const token = localStorage.getItem('token');
+    if(!token) {
+      return;
+    }
+    mainApi.saveArticle(token, card)
+    .then(() => {
+      setSavedArticles([...savedArticles, card]);
+      mainApi.getSavedArticles(token)
+      .then((res) => {
+        setSavedArticles(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
+
+  function refreshSavedNewsArray(array) {
+    setSavedArticles(array);
+  }
+
+  function deleteArticle(cardId) {
+    const token = localStorage.getItem('token');
+    return mainApi.deleteArticle(token, cardId)
   }
 
   React.useEffect(() => {
@@ -113,40 +196,45 @@ function App() {
   }, [window.innerWidth]);
 
   React.useEffect(() => {
+    if(JSON.parse(localStorage.getItem('articles'))) {
+        const parsedArticles = JSON.parse(localStorage.getItem('articles'));
+        setIsSearchActive(true);
+        setArticles(parsedArticles);
+    }
     if(localStorage.getItem('token')) {
       const token = localStorage.getItem('token');
-      mainApi.getUser(token)
+      const keyword = localStorage.getItem('keyword');
+      Promise.all([mainApi.getUser(token), mainApi.getSavedArticles(token)])
       .then((res) => {
+        const [user, articles] = res;
         if(res) {
+          setArticleKeyword(keyword);
+          setCurrentUser(user);
           setLoggedIn(true);
-          setCurrentUser(res);
+          setSavedArticles([...savedArticles, ...articles]);
         } else {
-          localStorage.removeItem('token');
+          setIsSearchActive(false);
         }
-        
       })
       .catch((err) => {
         console.log(err);
       })
     }
-  }, [loggedIn])
+  }, [])
+
 
   return (
     <div className="root">
       <UserContext.Provider value={currentUser}>
         <Switch>
-          <ProtectedRoute loggedIn={loggedIn} path="/saved-news" component={SavedNews} shortenedHeaderWidth={shortenedHeader} savedNewsPage={true} savedNews={savedNews} onLogoutButtonClick={onLogoutButtonClick}></ProtectedRoute>
-          {/* <ProtectedRoute loggedIn={loggedIn} path="/saved-news" component={TestComponent} /> */}
+          <ProtectedRoute exact path='/saved-news' loggedIn={loggedIn} isOpen={openedRegisterPopup} component={SavedNews} refreshSavedNewsArray={refreshSavedNewsArray} onDeleteArticle={deleteArticle} shortenedHeaderWidth={shortenedHeader} savedNewsPage={true} news={savedArticles} onLogoutButtonClick={onLogoutButtonClick} onRedirect={expandPopupWithForm}></ProtectedRoute>
           <Route exact path="/">
-            <Main shortenedHeaderWidth={shortenedHeader} news={articles} onLoginButtonClick={expandPopupWithForm} onLogoutButtonClick={onLogoutButtonClick} mainPage={true} showPopup={expandPopupWithForm} handleMoreNewsButton={addNews} />
+            <Main keyword={articleKeyword} onSearchSubmit={searchFormSubmit} refreshSavedNewsArray={refreshSavedNewsArray} onDeleteArticle={deleteArticle} onSaveArticle={saveArticle} articlesNotFound={articlesNotFound} isPreloaderActive={isPreloaderActive} shortenedHeaderWidth={shortenedHeader} isSearchActive={isSearchActive} onSearchSubmit={searchFormSubmit} news={articles} favourites={savedArticles} onLoginButtonClick={expandPopupWithForm} onLogoutButtonClick={onLogoutButtonClick} mainPage={true} showPopup={expandPopupWithForm} />
           </Route>
-          {/* <Route path="/saved-news">
-            <SavedNews loggedIn={loggedIn} path="/saved-news" component={SavedNews} shortenedHeaderWidth={shortenedHeader} savedNewsPage={true} savedNews={savedNews} onLogoutButtonClick={onLogoutButtonClick} />
-          </Route> */}
         </Switch>
         <Footer></Footer>
         <Login isOpen={openedLoginPopup} popupClass="popup_type_login" close={closePopupWithForm} swapPopupsWithForms={swapPopupsWithForms} onSubmit={submitLoginForm}></Login>
-        <Register isOpen={openedRegisterPopup} popupClass="popup_type_register" close={closePopupWithForm} swapPopupsWithForms={swapPopupsWithForms}></Register>
+        <Register isOpen={openedRegisterPopup} registered={registered} popupClass="popup_type_register" close={closePopupWithForm} swapPopupsWithForms={swapPopupsWithForms} onSubmit={submitRegistrationForm}></Register>
       </UserContext.Provider>
     </div>
   );

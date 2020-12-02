@@ -17,11 +17,11 @@ function Main(props) {
                 <div className="container">
                     <h1 className="main__headline">Что творится в мире?</h1>
                     <p className="main__subtitle">Находите самые свежие статьи на любую тему и сохраняйте в своем личном кабинете.</p>
-                    <SearchForm></SearchForm>
+                    <SearchForm onSearchSubmit={props.onSearchSubmit}></SearchForm>
                 </div>
             </section>
         </div>
-        <NewsCardList news={props.news} mainPage={props.mainPage} handleMoreNewsButton={props.handleMoreNewsButton}></NewsCardList>
+        {props.isSearchActive ? <NewsCardList keyword={props.keyword} refreshSavedNewsArray={props.refreshSavedNewsArray} favourites={props.favourites} onDeleteArticle={props.onDeleteArticle} onSaveArticle={props.onSaveArticle} onLogoutBookmarkButtonClick={props.onLoginButtonClick} articlesNotFound={props.articlesNotFound} isPreloaderActive={props.isPreloaderActive} news={props.news} mainPage={props.mainPage}></NewsCardList> : ""}
         <About></About>
         </>
     )

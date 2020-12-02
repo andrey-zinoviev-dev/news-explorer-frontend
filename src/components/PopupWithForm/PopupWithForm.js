@@ -62,7 +62,6 @@ function PopupWithFrom(props) {
         } else {
             validForm = false;
         }
-        console.log(validEmail);
     }
 
     function handleFormSubmit(evt) {
@@ -79,14 +78,14 @@ function PopupWithFrom(props) {
         }
     }
     changeCloseLogoSize();
-
+    
     return (
         <section className={props.isOpen ? `popup ${props.popupClass}_status_opened` : "popup"}>
             <div className="container">
                 <div className="popup__wrapper">
                     <button className="popup__close" onClick={props.close}><img className="popup__close-logo" src={!smallWidth ? popupCloseSing : popupCloseSignSmall} alt="кнопка закрытия окна"></img></button>
-                    <h3 className="popup__heading">{props.heading}</h3>
-                    <form className="popup__form" noValidate={true} onSubmit={handleFormSubmit}>
+                    <h3 className="popup__heading">{props.registered ? "Пользователь успешно зарегистрирован!" : props.heading}</h3>
+                    {!props.registered ? <form className="popup__form" noValidate={true} onSubmit={handleFormSubmit}>
                         <label className="popup__form-label">Email</label>
                         <input className="popup__form-input" placeholder="Введите почту" type="email" name="email" pattern="\w+@\w+\.\w+" onInput={checkInputValidity} autoComplete="off"></input>
                         <span className="popup__error-span">{validEmail.message}</span>
@@ -103,8 +102,8 @@ function PopupWithFrom(props) {
                                 ""
                         }
                         <button className={validForm ? "popup__form-submit popup__form-submit_valid-form" : "popup__form-submit"} type="submit" disabled={!validForm ? true : false}>{props.submitButtonText}</button>
-                    </form>
-                    <span className="popup__subtitle">или </span><a className="popup__link" onClick={props.swapPopupsWithForms}>{props.link}</a>
+                    </form> : ""}
+                    {!props.registered ? <span className="popup__subtitle">или </span> : ""}<a className="popup__link" onClick={props.swapPopupsWithForms}>{props.link}</a>
                 </div>
             </div>
             <div className="popup__overlay"></div>
