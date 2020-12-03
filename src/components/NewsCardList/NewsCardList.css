@@ -8,12 +8,32 @@
 .cards__wrapper {
     margin: 0 104px;
 }
+.cards__wrapper_search_empty {
+    text-align: center;
+}
 .cards__heading {
     font-family: "Robotoslab";
     font-size: 40px;
     line-height: 46px;
     font-weight: 400;
     margin: 0 0 64px 0;
+}
+.cards__heading_search_empty {
+    margin: 24px calc((100% - 356px)/2) 16px;
+    font-size: 26px;
+    line-height: 30px;
+    font-weight: 500;
+    font-family: "Robotoslab";
+}
+.cards__span {
+    font-size: 18px;
+    line-height: 24px;
+    font-family: "Roboto";
+    color: #B6BCBF;
+    margin: 0 calc((100% - 356px)/2) 0;
+}
+.cards__span_type_server-error {
+    color: black;
 }
 .cards__list {
     list-style: none;
@@ -71,6 +91,9 @@
     }
     .cards__heading {
         margin-bottom: 24px;
+    }
+    .cards__span {
+        margin: 0;
     }
     .cards__list {
         grid-template-columns: 1fr;
