@@ -32,6 +32,9 @@
     color: #B6BCBF;
     margin: 0 calc((100% - 356px)/2) 0;
 }
+.cards__span_type_server-error {
+    color: black;
+}
 .cards__list {
     list-style: none;
     padding: 0;

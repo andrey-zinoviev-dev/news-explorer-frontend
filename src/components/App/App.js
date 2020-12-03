@@ -31,7 +31,8 @@ function App() {
   const [articlesNotFound, setArticlesNotFound] = React.useState(false);
   const [articleKeyword, setArticleKeyword] = React.useState("");
   const history = useHistory();
-
+  const [onSubmitError, setOnSubmitError] = React.useState("");
+  const [newsApiServerError, setNewsApiServerError] = React.useState(false);
   function expandPopupWithForm() {
     setOpenedLoginPopup(true);
   }
@@ -39,6 +40,7 @@ function App() {
   function closePopupWithForm() {
     setOpenedLoginPopup(false);
     setOpenedRegisterPopup(false);
+    
   }
 
   function setHeaderWidth() {
@@ -67,14 +69,23 @@ function App() {
   function swapPopupsWithForms() {
     setOpenedLoginPopup(!openedLoginPopup);
     setOpenedRegisterPopup(!openedRegisterPopup);
+    setOnSubmitError("");
   }
 
   function submitLoginForm(evt, formData) {
     evt.preventDefault();
     mainApi.loginUser(formData)
     .then((res) => {
-      localStorage.setItem('token', res.payload);
-      return res;
+      if(res.payload) {
+        localStorage.setItem('token', res.payload);
+        evt.target.reset();
+        return res;
+      } else {
+        const errorStatusCode = parseInt(res, 10);
+        if(errorStatusCode === 400) {
+          throw new Error("Проверьте почту или пароль");
+        }
+      }
     })
     .then(() => {
       const token = localStorage.getItem('token');
@@ -82,7 +93,6 @@ function App() {
       const keyword = localStorage.getItem('keyword');
       mainApi.getUser(token)
       .then((res) => {
-        evt.target.reset();
         setCurrentUser(res);
         setLoggedIn(true);
         if(parsedArticles) {
@@ -106,18 +116,25 @@ function App() {
       })
     })
     .catch((err) => {
-      console.log(err);
+      setOnSubmitError(err.message);
     });
   }
 
   function submitRegistrationForm(evt, formData) {
     evt.preventDefault();
     mainApi.registerUser(formData)
-    .then(() => {
-      setRegistered(true);
+    .then((res) => {
+      if(res.ok) {
+        setRegistered(true);
+      } else {
+        const errStatusCode = parseInt(res, 10);
+        if(errStatusCode === 409) {
+          throw new Error('Такой пользователь уже существует');
+        }
+      }
     })
     .catch((err) => {
-      console.log(err);
+      setOnSubmitError(err.message);
     })
   }
 
@@ -138,22 +155,28 @@ function App() {
     setIsPreloaderActive(true);
     newsApi.getNews(topic)
         .then((res) => {
-          if(res.articles.length === 0) {
-            setIsPreloaderActive(false);
-            setArticlesNotFound(true);
+          if(res.status === 'error') {
+            throw new Error ('Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз');
           } else {
-            localStorage.setItem('articles', JSON.stringify(res.articles));
-            localStorage.setItem('keyword', topic);
-            setArticlesNotFound(false);
-            setIsPreloaderActive(false);
-            setArticleKeyword(topic);
-            setArticles(res.articles);
-            evt.target.reset();
+            if(res.articles.length === 0) {
+              setIsPreloaderActive(false);
+              setArticlesNotFound(true);
+            } else {
+              localStorage.setItem('articles', JSON.stringify(res.articles));
+              localStorage.setItem('keyword', topic);
+              setArticlesNotFound(false);
+              setIsPreloaderActive(false);
+              setArticleKeyword(topic);
+              setArticles(res.articles);
+              evt.target.reset();
+            }
           }
-          
         })
         .catch((err) => {
-          console.log(err);
+          setOnSubmitError(err.message);
+          setNewsApiServerError(true);
+          setArticlesNotFound(false);
+          setIsPreloaderActive(false);
         })
   }
 
@@ -229,12 +252,12 @@ function App() {
         <Switch>
           <ProtectedRoute exact path='/saved-news' loggedIn={loggedIn} isOpen={openedRegisterPopup} component={SavedNews} refreshSavedNewsArray={refreshSavedNewsArray} onDeleteArticle={deleteArticle} shortenedHeaderWidth={shortenedHeader} savedNewsPage={true} news={savedArticles} onLogoutButtonClick={onLogoutButtonClick} onRedirect={expandPopupWithForm}></ProtectedRoute>
           <Route exact path="/">
-            <Main keyword={articleKeyword} onSearchSubmit={searchFormSubmit} refreshSavedNewsArray={refreshSavedNewsArray} onDeleteArticle={deleteArticle} onSaveArticle={saveArticle} articlesNotFound={articlesNotFound} isPreloaderActive={isPreloaderActive} shortenedHeaderWidth={shortenedHeader} isSearchActive={isSearchActive} onSearchSubmit={searchFormSubmit} news={articles} favourites={savedArticles} onLoginButtonClick={expandPopupWithForm} onLogoutButtonClick={onLogoutButtonClick} mainPage={true} showPopup={expandPopupWithForm} />
+            <Main newsApiServerError={newsApiServerError} onSubmitError={onSubmitError} keyword={articleKeyword} onSearchSubmit={searchFormSubmit} refreshSavedNewsArray={refreshSavedNewsArray} onDeleteArticle={deleteArticle} onSaveArticle={saveArticle} articlesNotFound={articlesNotFound} isPreloaderActive={isPreloaderActive} shortenedHeaderWidth={shortenedHeader} isSearchActive={isSearchActive} onSearchSubmit={searchFormSubmit} news={articles} favourites={savedArticles} onLoginButtonClick={expandPopupWithForm} onLogoutButtonClick={onLogoutButtonClick} mainPage={true} showPopup={expandPopupWithForm} />
           </Route>
         </Switch>
         <Footer></Footer>
-        <Login isOpen={openedLoginPopup} popupClass="popup_type_login" close={closePopupWithForm} swapPopupsWithForms={swapPopupsWithForms} onSubmit={submitLoginForm}></Login>
-        <Register isOpen={openedRegisterPopup} registered={registered} popupClass="popup_type_register" close={closePopupWithForm} swapPopupsWithForms={swapPopupsWithForms} onSubmit={submitRegistrationForm}></Register>
+        <Login onSubmitError={onSubmitError} isOpen={openedLoginPopup} popupClass="popup_type_login" close={closePopupWithForm} swapPopupsWithForms={swapPopupsWithForms} onSubmit={submitLoginForm}></Login>
+        <Register onSubmitError={onSubmitError} isOpen={openedRegisterPopup} registered={registered} popupClass="popup_type_register" close={closePopupWithForm} swapPopupsWithForms={swapPopupsWithForms} onSubmit={submitRegistrationForm}></Register>
       </UserContext.Provider>
     </div>
   );

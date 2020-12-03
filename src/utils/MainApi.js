@@ -10,10 +10,10 @@ class MainApi extends React.Component {
         if(res.ok) {
             return res.json();
         }
-        return Promise.reject(`Ошибка: ${res.status}`)
+        return Promise.reject(`${res.status}`)
     }
     _handleError(err) {
-        return Promise.reject(`Ошибка: ${err}`)
+        return err
     }
     registerUser({email, password, name}) {
         return fetch(`${this.baseUrl}/signup`, {
@@ -26,7 +26,7 @@ class MainApi extends React.Component {
             })
         })
         .then(this._handleResponse)
-        .catch(this._handleResponse)
+        .catch(this._handleError)
     }
     loginUser({email, password}) {
         return fetch(`${this.baseUrl}/signin`, {

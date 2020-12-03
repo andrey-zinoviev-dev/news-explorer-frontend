@@ -11,7 +11,7 @@ function Login(props) {
     // }
 
     return (
-        <PopupWithForm popupClass={props.popupClass} isOpen={props.isOpen} popupSignUp={props.popupSignUp} close={props.close} onSubmit={props.onSubmit} swapPopupsWithForms={props.swapPopupsWithForms} heading="Войти" link="Зарегистрироваться" submitButtonText="Войти"></PopupWithForm>
+        <PopupWithForm onSubmitError={props.onSubmitError} popupClass={props.popupClass} isOpen={props.isOpen} popupSignUp={props.popupSignUp} close={props.close} onSubmit={props.onSubmit} swapPopupsWithForms={props.swapPopupsWithForms} heading="Войти" link="Зарегистрироваться" submitButtonText="Войти"></PopupWithForm>
     )
 }
 

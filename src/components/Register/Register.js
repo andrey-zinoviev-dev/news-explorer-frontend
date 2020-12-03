@@ -4,7 +4,7 @@ function Register(props) {
 
     
     return (
-        <PopupWithForm registered={props.registered} popupClass={props.popupClass} isOpen={props.isOpen} popupSignUp={true} close={props.close} onSubmit={props.onSubmit} swapPopupsWithForms={props.swapPopupsWithForms} heading="Регистрация" link="Войти" submitButtonText="Зарегистрироваться"></PopupWithForm>
+        <PopupWithForm onSubmitError={props.onSubmitError} registered={props.registered} popupClass={props.popupClass} isOpen={props.isOpen} popupSignUp={true} close={props.close} onSubmit={props.onSubmit} swapPopupsWithForms={props.swapPopupsWithForms} heading="Регистрация" link="Войти" submitButtonText="Зарегистрироваться"></PopupWithForm>
     )
 }
 

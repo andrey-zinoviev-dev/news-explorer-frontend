@@ -21,7 +21,7 @@ function Main(props) {
                 </div>
             </section>
         </div>
-        {props.isSearchActive ? <NewsCardList keyword={props.keyword} refreshSavedNewsArray={props.refreshSavedNewsArray} favourites={props.favourites} onDeleteArticle={props.onDeleteArticle} onSaveArticle={props.onSaveArticle} onLogoutBookmarkButtonClick={props.onLoginButtonClick} articlesNotFound={props.articlesNotFound} isPreloaderActive={props.isPreloaderActive} news={props.news} mainPage={props.mainPage}></NewsCardList> : ""}
+        {props.isSearchActive ? <NewsCardList newsApiServerError={props.newsApiServerError} onSubmitError={props.onSubmitError} keyword={props.keyword} refreshSavedNewsArray={props.refreshSavedNewsArray} favourites={props.favourites} onDeleteArticle={props.onDeleteArticle} onSaveArticle={props.onSaveArticle} onLogoutBookmarkButtonClick={props.onLoginButtonClick} articlesNotFound={props.articlesNotFound} isPreloaderActive={props.isPreloaderActive} news={props.news} mainPage={props.mainPage}></NewsCardList> : ""}
         <About></About>
         </>
     )

@@ -96,11 +96,17 @@ function NewsCard(props) {
             })
         } else {
             props.onDeleteArticle(props.id)
-            .then(() => {
-                const newSavedArticlesArray = props.news.filter((favourite) => {
-                    return favourite._id !== props.id;
-                });
-                props.refreshSavedNewsArray(newSavedArticlesArray);
+            .then((res) => {
+                if(res.status === 201) {
+                    const newSavedArticlesArray = props.news.filter((favourite) => {
+                        return favourite._id !== props.id;
+                    });
+                    props.refreshSavedNewsArray(newSavedArticlesArray);
+                } else {
+                    if(res.status === 403) {
+                        throw new Error ('Неавторизованы для удаления');
+                    }
+                }
             })
             .catch((err) => {
                 console.log(err);
