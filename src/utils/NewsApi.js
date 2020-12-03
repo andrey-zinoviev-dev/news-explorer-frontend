@@ -20,5 +20,5 @@ class NewsApi extends React.Component {
         .catch(this._handleError)
     }
 }
-const newsApi = new NewsApi('https://newsapi.org/v2');
+const newsApi = new NewsApi('https://nomoreparties.co/news/v2');
 export default newsApi;

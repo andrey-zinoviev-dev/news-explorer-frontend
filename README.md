@@ -2,6 +2,10 @@
 
 Это проект о новостях, которые можно сохранить себе на страницу, если Вы авторизованы
 
+# Адрес
+
+Ссылка: [https://t29.students.nomoreparties.co/]
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
