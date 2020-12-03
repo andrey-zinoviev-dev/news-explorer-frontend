@@ -155,7 +155,7 @@ function App() {
     setIsPreloaderActive(true);
     newsApi.getNews(topic)
         .then((res) => {
-          if(res.status === 'error') {
+          if(res.status === 'error' || res.message) {
             throw new Error ('Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз');
           } else {
             if(res.articles.length === 0) {
