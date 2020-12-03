@@ -8,6 +8,8 @@
 }
 .about__image {
     width: 100%;
+    max-width: 464px;
+    border-radius: 1000px;
 }
 .about__text {
     margin-left: 56px;
